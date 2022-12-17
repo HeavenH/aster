@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ipbanlist {
+  list   String   @default("") @db.VarChar(15)
+  btime  DateTime @db.DateTime(0)
+  rtime  DateTime @db.DateTime(0)
+  reason String   @default("") @db.VarChar(255)
+
+  @@id([list, btime])
+}
+
+model login {
+  account_id             Int       @id @default(autoincrement()) @db.UnsignedInt
+  userid                 String    @default("") @db.VarChar(23)
+  user_pass              String    @default("") @db.VarChar(32)
+  sex                    String    @default("M")
+  email                  String    @default("") @db.VarChar(39)
+  group_id               Int       @default(0) @db.TinyInt
+  state                  Int       @default(0) @db.UnsignedInt
+  unban_time             Int       @default(0) @db.UnsignedInt
+  expiration_time        Int       @default(0) @db.UnsignedInt
+  logincount             Int       @default(0) @db.UnsignedMediumInt
+  lastlogin              DateTime? @db.DateTime(0)
+  last_ip                String    @default("") @db.VarChar(100)
+  birthdate              DateTime? @db.Date
+  character_slots        Int       @default(0) @db.UnsignedTinyInt
+  pincode                String    @default("") @db.VarChar(4)
+  pincode_change         Int       @default(0) @db.UnsignedInt
+  vip_time               Int       @default(0) @db.UnsignedInt
+  old_group              Int       @default(0) @db.TinyInt
+  web_auth_token         String?   @unique(map: "web_auth_token_key") @db.VarChar(17)
+  web_auth_token_enabled Int       @default(0) @db.TinyInt
+
+  @@index([userid], map: "name")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model loginlog {
+  time  DateTime @db.DateTime(0)
+  ip    String   @default("") @db.VarChar(15)
+  user  String   @default("") @db.VarChar(23)
+  rcode Int      @default(0) @db.TinyInt
+  log   String   @default("") @db.VarChar(255)
+
+  @@index([ip], map: "ip")
+  @@ignore
+}
+
+model market {
+  name   String @default("") @db.VarChar(50)
+  nameid Int    @db.UnsignedInt
+  price  Int    @db.UnsignedInt
+  amount Int
+  flag   Int    @default(0) @db.UnsignedTinyInt
+
+  @@id([name, nameid])
+}
