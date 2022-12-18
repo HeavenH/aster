@@ -23,7 +23,7 @@ export default function Home() {
 
     setCalled(true)
 
-    await fetch('http://localhost:3000/api/users/create', {
+    await fetch('https://aster-woad.vercel.app/', {
       method: 'POST',
       body: JSON.stringify({ email, username, password }),
       headers: { 'Content-Type': 'application/json' }
