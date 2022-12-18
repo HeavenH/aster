@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 faSpinner
 } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,11 +24,15 @@ export default function Home() {
 
     setCalled(true)
 
-    await fetch('https://aster-woad.vercel.app/api/users/create', {
-      method: 'POST',
-      body: JSON.stringify({ email, username, password }),
-      headers: { 'Content-Type': 'application/json' }
-    })
+    try {
+      console.log("entrou no catch")
+      await axios.post('http://localhost:3000/api/users/create', {
+        email, password, username
+      })
+    } catch (error) {
+      console.log(error)
+      return error
+    }
 
     setTimeout(() => setCalled(false), 1500);
   }
